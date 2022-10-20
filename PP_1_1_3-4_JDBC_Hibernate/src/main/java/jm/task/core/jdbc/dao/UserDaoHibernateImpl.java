@@ -11,10 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
+
     public UserDaoHibernateImpl() {
 
     }
-    private static final SessionFactory sessionFactory = Util.getSessionFactory();
+    private static final SessionFactory sessionFactory = Util.getInstance().getSessionFactory();
 
 
     @Override
@@ -26,6 +27,7 @@ public class UserDaoHibernateImpl implements UserDao {
                             "name VARCHAR(20), lastName VARCHAR(20), age TINYINT)")
                     .executeUpdate();
             transaction.commit();
+            System.out.println("Таблица создана");
         } catch (HibernateException e) {
             e.printStackTrace();
             if (transaction != null) {
@@ -42,6 +44,7 @@ public class UserDaoHibernateImpl implements UserDao {
             session.createSQLQuery("DROP TABLE IF EXISTS usersTable")
                     .executeUpdate();
             transaction.commit();
+            System.out.println("Таблица удалена");
         } catch (HibernateException e) {
             e.printStackTrace();
             if (transaction != null) {
@@ -58,6 +61,7 @@ public class UserDaoHibernateImpl implements UserDao {
             transaction = session.beginTransaction();
             session.save(new User(name, lastName, age));
             transaction.commit();
+            System.out.println("User с именем -" + name + " добавлен в базу данных");
         } catch (HibernateException e) {
             e.printStackTrace();
             if (transaction != null) {
@@ -73,6 +77,7 @@ public class UserDaoHibernateImpl implements UserDao {
             transaction = session.beginTransaction();
             session.delete(session.get(User.class, id));
             transaction.commit();
+            System.out.println("User удален");
         } catch (HibernateException e) {
             e.printStackTrace();
             if (transaction != null) {
@@ -107,6 +112,7 @@ public class UserDaoHibernateImpl implements UserDao {
             session.createSQLQuery("TRUNCATE TABLE usersTable")
                     .executeUpdate();
             transaction.commit();
+            System.out.println("Таблица очищена");
         } catch (HibernateException e) {
             e.printStackTrace();
             if (transaction != null) {
